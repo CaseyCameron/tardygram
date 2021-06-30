@@ -16,10 +16,9 @@ describe('demo routes', () => {
       .post('/api/v1/auth/signup')
       .send({
         email: 'signupTest@auth.com',
-        profilePhoto: '',
+        profilePhoto: 'photo_url',
         password: 'password'
       });
-
     expect(res.body).toEqual({
       id: '1',
       email: 'signupTest@auth.com',
