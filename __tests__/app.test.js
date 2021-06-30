@@ -114,6 +114,9 @@ describe('demo routes', () => {
       tags: ['tweet3 tag1', 'tweet3 tag2']
     });
 
+    //modify the tweet caption
+    tweet3.caption = 'This is my new PATCHed caption';
+
     //PATCH with new caption and authenticate user through agent
     const res = await agent
       .patch(`/api/v1/tweets/${tweet3.id}`)
