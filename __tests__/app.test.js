@@ -4,12 +4,14 @@ import request from 'supertest';
 import app from '../lib/app.js';
 import UserService from '../lib/services/userService.js';
 import Tweet from '../lib/models/Tweet.js';
+import Comment from '../lib/models/Comment.js';
 
 describe('demo routes', () => {
   const agent = request.agent(app);
   let user;
   let tweet1;
   let tweet2;
+  let comment1;
 
   beforeEach(async () => {
     await setup(pool);
@@ -41,6 +43,13 @@ describe('demo routes', () => {
       photoUrl: 'tweet2 url',
       caption: 'tweet2 caption',
       tags: ['tweet2 Tag1', 'tweet2 Tag2']
+    });
+
+    //posts comments for tweet2
+    comment1 = await Comment.insert({
+      commentBy: user.id,
+      tweet: tweet2.id,
+      comment: 'This is a comment on tweet2'
     });
   });
 
@@ -153,5 +162,13 @@ describe('demo routes', () => {
       tweet: tweet1.id,
       comment: 'This is a comment'
     });
+  });
+
+  it('DELETES a comment and requires authentication', async () => {
+    //it deletes the comment on tweet2
+    const res = await agent
+      .delete(`/api/v1/comments/${comment1.id}`);
+    
+    expect(res.body).toEqual(comment1);
   });
 });
