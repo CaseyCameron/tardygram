@@ -12,7 +12,19 @@ describe('demo routes', () => {
   });
 
   it('POST - signs up a user', async () => {
-    const res = await(app).post('')
+    const res = await request(app)
+      .post('/signup')
+      .send({
+        email: 'signupTest@auth.com',
+        profilePhoto: '',
+        password: 'password'
+      });
+
+    expect(res.body).toEqual({
+      id: '1',
+      email: 'signupTest@auth.com',
+      profilePhoto: expect.any(String)
+    });
   });
 
 });
