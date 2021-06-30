@@ -3,10 +3,13 @@ import setup from '../data/setup.js';
 import request from 'supertest';
 import app from '../lib/app.js';
 import UserService from '../lib/services/userService.js';
+import Tweet from '../lib/models/Tweet.js';
 
 describe('demo routes', () => {
   const agent = request.agent(app);
   let user;
+  let tweet1;
+  let tweet2;
 
   beforeEach(async () => {
     await setup(pool);
@@ -24,6 +27,21 @@ describe('demo routes', () => {
         email: 'Bill',
         password: 'password'
       });
+
+    //post tweets for that user here
+    tweet1 = await Tweet.insert({
+      userId: user.id,
+      photoUrl: 'tweet1 url',
+      caption: 'tweet1 caption',
+      tags: ['tweet1 Tag1', 'tweet1 Tag2']
+    });
+
+    tweet2 = await Tweet.insert({
+      userId: user.id,
+      photoUrl: 'tweet2 url',
+      caption: 'tweet2 caption',
+      tags: ['tweet2 Tag1', 'tweet2 Tag2']
+    });
   });
 
   //auth 
@@ -69,11 +87,18 @@ describe('demo routes', () => {
       });
 
     expect(res.body).toEqual({
-      id: '1',
+      id: '3',
       userId: '1',
       photoUrl: 'url',
       caption: 'caption',
       tags: []
     });
+  });
+
+  it('GETs all tweets, responding with a list of tweets', async () => {
+    const res = await agent
+      .get('/api/v1/tweets');
+    console.log(tweet1, tweet2);
+    expect(res.body).toEqual([tweet1, tweet2]);
   });
 });
