@@ -110,15 +110,15 @@ describe('demo routes', () => {
     expect(res.body).toEqual([tweet1, tweet2]);
   });
 
-  it.only('GETs a tweet by id with comments and user id', async () => {
+  it('GETs a tweet by id with comments and user id', async () => {
     const tweetToGet = await Tweet.insert({
       userId: user.id,
-      photoUrl: 'tweet url',
-      caption: 'tweet caption',
-      tags: ['tweet Tag1', 'tweet Tag2']
+      photoUrl: '*** photo',
+      caption: '*** caption',
+      tags: ['*** Tag1', '*** Tag2']
     });
 
-    //posts comments for tweet2
+    //posts comments on tweetToGet
     await Comment.insert({
       commentBy: user.id,
       tweet: tweetToGet.id,
@@ -127,8 +127,13 @@ describe('demo routes', () => {
 
     const res = await agent
       .get(`/api/v1/tweets/${tweetToGet.id}`);
-    console.log(res.body);
-    expect(res.body).toEqual([tweetToGet]);
+    expect(res.body).toEqual([{
+      'caption': '*** caption', 'comment': 'This is a comment on tweet2', 'comment_by': '1', 'id': '1', 'photo_url': '*** photo',
+      'tags': ['*** Tag1', '*** Tag2'], 'tweet': '2', 'user_id': '1'
+    }, {
+      'caption': '*** caption', 'comment': 'This is a comment on tweetToGet',
+      'comment_by': '1', 'id': '2', 'photo_url': '*** photo', 'tags': ['*** Tag1', '*** Tag2'], 'tweet': '3', 'user_id': '1'
+    }]);
   });
 
   it.skip('GETS the 10 most commented posts ', async () => {
