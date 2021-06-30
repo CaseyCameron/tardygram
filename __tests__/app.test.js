@@ -19,7 +19,7 @@ describe('demo routes', () => {
         profilePhoto: 'photo_url',
         password: 'password'
       });
-    
+
     expect(res.body).toEqual({
       id: '1',
       email: 'signupTest@auth.com',
@@ -35,11 +35,11 @@ describe('demo routes', () => {
         profilePhoto: 'photo_url',
         password: 'password'
       });
-      
+
     expect(res.body).toEqual({
       id: '1',
       email: 'loginTest@auth.com',
-      profielPhoto: 'photo_url'
+      profilePhoto: 'photo_url'
     });
   });
 });
