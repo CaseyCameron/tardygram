@@ -110,8 +110,25 @@ describe('demo routes', () => {
     expect(res.body).toEqual([tweet1, tweet2]);
   });
 
-  it.skip('GETs a tweet by id with comments and user id', async () => {
+  it.only('GETs a tweet by id with comments and user id', async () => {
+    const tweetToGet = await Tweet.insert({
+      userId: user.id,
+      photoUrl: 'tweet url',
+      caption: 'tweet caption',
+      tags: ['tweet Tag1', 'tweet Tag2']
+    });
 
+    //posts comments for tweet2
+    const commentToGet = await Comment.insert({
+      commentBy: user.id,
+      tweet: tweetToGet.id,
+      comment: 'This is a comment on tweetToGet'
+    });
+
+    const res = await agent
+      .get(`/api/v1/tweets/${tweetToGet.id}`);
+    //console.log(tweetToGet, commentToGet);
+    expect(res.body).toEqual(tweetToGet);
   });
 
   it.skip('GETS the 10 most commented posts ', async () => {
@@ -139,11 +156,18 @@ describe('demo routes', () => {
   });
 
   it('DELETES a tweet by id using authentication', async () => {
-    //let's delete tweet2
-    const res = await agent
-      .delete(`/api/v1/tweets/${tweet2.id}`);
+    const tweetToDelete = await Tweet.insert({
+      userId: user.id,
+      photoUrl: 'url',
+      caption: 'delete this',
+      tags: []
+    });
 
-    expect(res.body).toEqual(tweet2);
+    const res = await agent
+      .delete(`/api/v1/tweets/${tweetToDelete.id}`)
+      .send(tweetToDelete);
+
+    expect(res.body).toEqual(tweetToDelete);
   });
 
   //comments
@@ -157,7 +181,7 @@ describe('demo routes', () => {
       });
 
     expect(res.body).toEqual({
-      id: '1',
+      id: '2',
       commentBy: user.id,
       tweet: tweet1.id,
       comment: 'This is a comment'
@@ -165,10 +189,16 @@ describe('demo routes', () => {
   });
 
   it('DELETES a comment and requires authentication', async () => {
-    //it deletes the comment on tweet2
+    const commentToDelete = await Comment.insert({
+      commentBy: user.id,
+      tweet: tweet1.id,
+      comment: 'This is a comment'
+    });
+
     const res = await agent
-      .delete(`/api/v1/comments/${comment1.id}`);
-    
-    expect(res.body).toEqual(comment1);
+      .delete(`/api/v1/comments/${commentToDelete.id}`)
+      .send(commentToDelete);
+
+    expect(res.body).toEqual(commentToDelete);
   });
 });
