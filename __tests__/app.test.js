@@ -121,7 +121,7 @@ describe('demo routes', () => {
     const res = await agent
       .patch(`/api/v1/tweets/${tweet3.id}`)
       .send({ caption: 'This is my new PATCHed caption' });
-    
+
     expect(res.body).toEqual(tweet3);
   });
 
@@ -129,7 +129,7 @@ describe('demo routes', () => {
     //let's delete tweet2
     const res = await agent
       .delete(`/api/v1/tweets/${tweet2.id}`);
-    
+
     expect(res.body).toEqual(tweet2);
   });
 });
