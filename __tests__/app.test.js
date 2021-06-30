@@ -124,4 +124,12 @@ describe('demo routes', () => {
     
     expect(res.body).toEqual(tweet3);
   });
+
+  it('DELETES a tweet by id using authentication', async () => {
+    //let's delete tweet2
+    const res = await agent
+      .delete(`/api/v1/tweets/${tweet2.id}`);
+    
+    expect(res.body).toEqual(tweet2);
+  });
 });
