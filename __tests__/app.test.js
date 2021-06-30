@@ -105,6 +105,10 @@ describe('demo routes', () => {
 
   });
 
+  it.skip('GETS the 10 most commented posts ', async () => {
+
+  });
+
   it('UPDATES a tweet by PATCH, requires auth and updates caption', async () => {
     //create a new tweet for user (aka Bill)
     const tweet3 = await Tweet.insert({
@@ -131,5 +135,23 @@ describe('demo routes', () => {
       .delete(`/api/v1/tweets/${tweet2.id}`);
 
     expect(res.body).toEqual(tweet2);
+  });
+
+  //comments
+  it('POSTS a comment and requires authentication', async () => {
+    const res = await agent
+      .post('/api/v1/comments')
+      .send({
+        commentBy: user.id,
+        tweet: tweet1.id,
+        comment: 'This is a comment'
+      });
+
+    expect(res.body).toEqual({
+      id: '1',
+      commentBy: user.id,
+      tweet: tweet1.id,
+      comment: 'This is a comment'
+    });
   });
 });
