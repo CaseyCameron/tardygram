@@ -13,7 +13,7 @@ describe('demo routes', () => {
 
   it('POST - signs up a user', async () => {
     const res = await request(app)
-      .post('/signup')
+      .post('/api/v1/auth/signup')
       .send({
         email: 'signupTest@auth.com',
         profilePhoto: '',
