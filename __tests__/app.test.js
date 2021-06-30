@@ -98,7 +98,27 @@ describe('demo routes', () => {
   it('GETs all tweets, responding with a list of tweets', async () => {
     const res = await agent
       .get('/api/v1/tweets');
-    console.log(tweet1, tweet2);
     expect(res.body).toEqual([tweet1, tweet2]);
+  });
+
+  it.skip('GETs a tweet by id with comments and user id', async () => {
+
+  });
+
+  it('UPDATES a tweet by PATCH, requires auth and updates caption', async () => {
+    //create a new tweet for user (aka Bill)
+    const tweet3 = await Tweet.insert({
+      userId: user.id,
+      photoUrl: 'tweet3 url',
+      caption: 'I\'m going to PATCH this',
+      tags: ['tweet3 tag1', 'tweet3 tag2']
+    });
+
+    //PATCH with new caption and authenticate user through agent
+    const res = await agent
+      .patch(`/api/v1/tweets/${tweet3.id}`)
+      .send({ caption: 'This is my new PATCHed caption' });
+    
+    expect(res.body).toEqual(tweet3);
   });
 });
