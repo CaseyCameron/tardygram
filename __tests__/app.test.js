@@ -119,7 +119,7 @@ describe('demo routes', () => {
     });
 
     //posts comments for tweet2
-    const commentToGet = await Comment.insert({
+    await Comment.insert({
       commentBy: user.id,
       tweet: tweetToGet.id,
       comment: 'This is a comment on tweetToGet'
@@ -127,8 +127,8 @@ describe('demo routes', () => {
 
     const res = await agent
       .get(`/api/v1/tweets/${tweetToGet.id}`);
-    //console.log(tweetToGet, commentToGet);
-    expect(res.body).toEqual(tweetToGet);
+    console.log(res.body);
+    expect(res.body).toEqual([tweetToGet]);
   });
 
   it.skip('GETS the 10 most commented posts ', async () => {
