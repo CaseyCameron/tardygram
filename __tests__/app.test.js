@@ -11,7 +11,7 @@ describe('demo routes', () => {
   let user;
   let tweet1;
   let tweet2;
-  let comment1;
+  let comment1; // eslint-disable-line
 
   beforeEach(async () => {
     await setup(pool);
