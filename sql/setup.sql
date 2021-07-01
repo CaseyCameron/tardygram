@@ -8,16 +8,18 @@ CREATE TABLE users (
   profile_photo TEXT NOT NULL,
   password_hash TEXT NOT NULL
 );
+
 CREATE TABLE tweets (
   id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-  user_id BIGINT REFERENCES users(id),
+  user_id BIGINT REFERENCES users(id) NOT NULL,
   photo_url TEXT NOT NULL,
   caption TEXT NOT NULL,
-  tags TEXT []
+  tags TEXT [] NOT NULL
 );
+
 CREATE TABLE comments (
   id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-  comment_by BIGINT REFERENCES users(id),
-  tweet BIGINT REFERENCES tweets(id),
+  comment_by BIGINT REFERENCES users(id) NOT NULL,
+  tweet BIGINT REFERENCES tweets(id) NOT NULL,
   comment TEXT NOT NULL
 );

@@ -136,10 +136,6 @@ describe('demo routes', () => {
     }]);
   });
 
-  it.skip('GETS the 10 most commented posts ', async () => {
-
-  });
-
   it('UPDATES a tweet by PATCH, requires auth and updates caption', async () => {
     //create a new tweet for user (aka Bill)
     const tweet3 = await Tweet.insert({
@@ -206,4 +202,37 @@ describe('demo routes', () => {
 
     expect(res.body).toEqual(commentToDelete);
   });
+
+  it('GETS the 10 most commented posts ', async () => {
+    const tweet1 = await Tweet.insert({
+      userId: user.id,
+      photoUrl: '*',
+      caption: '*',
+      tags: ['*']
+    });
+
+    await Comment.insert({
+      commentBy: 1,
+      tweet: tweet1.id,
+      comment: '*'
+    });
+
+    await Comment.insert({
+      commentBy: 1,
+      tweet: tweet1.id,
+      comment: '**'
+    });
+
+    await Comment.insert({
+      commentBy: 1,
+      tweet: tweet1.id,
+      comment: '***'
+    });
+
+    const res = await request(app)
+      .get('/api/v1/tweets/popular');
+
+    expect(res.body).toEqual(tweet1);
+  });
+
 });
