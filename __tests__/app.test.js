@@ -231,8 +231,8 @@ describe('demo routes', () => {
 
     const res = await request(app)
       .get('/api/v1/tweets/popular');
-
-    expect(res.body).toEqual(tweet1);
+    //the first element in res.body has the popular tweet
+    expect(res.body[0]).toEqual(tweet1);
   });
 
 });
